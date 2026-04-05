@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "Gmail Forwarder",
+  "version": "1.0",
+  "description": "Forward all emails in the current Gmail view to a fixed address.",
+  "permissions": ["activeTab", "scripting"],
+  "host_permissions": ["https://mail.google.com/*"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "Forward all emails"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://mail.google.com/*"],
+      "js": ["utils.js", "ui.js", "gmail.js", "content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
