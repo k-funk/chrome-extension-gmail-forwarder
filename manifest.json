@@ -8,8 +8,10 @@
   "background": {
     "service_worker": "background.js"
   },
+  "icons": { "192": "icon.png" },
   "action": {
-    "default_title": "Forward all emails"
+    "default_title": "Forward all emails",
+    "default_icon": "icon.png"
   },
   "content_scripts": [
     {
