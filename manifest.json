@@ -3,7 +3,7 @@
   "name": "Gmail Forwarder",
   "version": "1.0",
   "description": "Forward all emails in the current Gmail view to a fixed address.",
-  "permissions": ["activeTab", "scripting"],
+  "permissions": ["activeTab", "scripting", "debugger"],
   "host_permissions": ["https://mail.google.com/*"],
   "background": {
     "service_worker": "background.js"

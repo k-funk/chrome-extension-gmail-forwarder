@@ -10,3 +10,33 @@ chrome.action.onClicked.addListener(async (tab) => {
     await chrome.tabs.sendMessage(tab.id, { action: 'forwardAll' });
   }
 });
+
+// Content script requests a trusted keypress via the Chrome Debugger Protocol.
+// Synthetic KeyboardEvents are blocked by Gmail (isTrusted=false); CDP events are not.
+// msg: { action: 'pressKey', key: 'f', code: 'KeyF', keyCode: 70 }
+chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+  if (msg.action !== 'pressKey') return;
+  const target = { tabId: sender.tab.id };
+  const keyDown = { type: 'keyDown', key: msg.key, code: msg.code, windowsVirtualKeyCode: msg.keyCode, nativeVirtualKeyCode: msg.keyCode, text: msg.key };
+  (async () => {
+    try {
+      await new Promise((res, rej) =>
+        chrome.debugger.attach(target, '1.3', () =>
+          chrome.runtime.lastError ? rej(chrome.runtime.lastError) : res()
+        )
+      );
+      await new Promise((res) =>
+        chrome.debugger.sendCommand(target, 'Input.dispatchKeyEvent', keyDown, res)
+      );
+      await new Promise((res) =>
+        chrome.debugger.sendCommand(target, 'Input.dispatchKeyEvent', { ...keyDown, type: 'keyUp', text: '' }, res)
+      );
+    } catch (err) {
+      console.error('[Gmail Forwarder] pressForward error:', err);
+    } finally {
+      await new Promise((res) => chrome.debugger.detach(target, res));
+    }
+    sendResponse({ ok: true });
+  })();
+  return true; // keep message channel open for async sendResponse
+});

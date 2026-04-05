@@ -18,27 +18,24 @@ async function forwardAll() {
   stopRequested = false;
   showStopButton();
 
-  const total = counter.total - counter.current; // emails remaining after this one
-
+  const totalToSend = counter.total - counter.current + 1; // includes current email
   let forwarded = 0;
 
   try {
     while (true) {
       if (stopRequested) break;
 
+      updateProgress(forwarded + 1, totalToSend);
       await forwardOne();
       forwarded++;
 
-      // Stop if we've hit the total we calculated upfront.
-      if (total !== null && forwarded >= total + 1) break;
+      if (forwarded >= totalToSend) break;
 
       if (stopRequested) break;
 
-      // Click Gmail's "Older" navigation button to move to the next email.
+      // Send trusted 'j' keypress (Gmail's "next email" shortcut) to navigate.
       const idBefore = currentMessageId();
-      const olderBtn = findButton(/\bOlder\b/i);
-      if (!olderBtn) break;
-      olderBtn.click();
+      await chrome.runtime.sendMessage({ action: 'pressKey', key: 'j', code: 'KeyJ', keyCode: 74 });
       await sleep(800);
 
       // If the URL didn't change, we've run out of emails.

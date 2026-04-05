@@ -71,7 +71,13 @@ function showStopButton() {
     btn.disabled = true;
     btn.style.opacity = '0.6';
   });
+  btn._label = label;
   document.body.appendChild(btn);
+}
+
+function updateProgress(index, total) {
+  const btn = document.getElementById('gmail-forwarder-stop');
+  if (btn?._label && !stopRequested) btn._label.textContent = `Forwarding ${index}/${total}`;
 }
 
 function removeStopButton() {
