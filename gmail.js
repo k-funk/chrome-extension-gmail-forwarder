@@ -36,7 +36,7 @@ async function forwardOne() {
   });
 
   await sleep(500);
-  await typeInto(toField, RECIPIENT);
+  pasteInto(toField, RECIPIENT);
 
   // Tab to confirm the address chip.
   toField.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', keyCode: 9, bubbles: true }));

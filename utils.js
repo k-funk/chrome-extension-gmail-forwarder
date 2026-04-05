@@ -18,14 +18,9 @@ function findButton(labelRegex) {
   }) || null;
 }
 
-// Type a string into a focused element using execCommand, which fires the
+// Paste a string into a focused element using execCommand, which fires the
 // internal input events Gmail's React layer listens to.
-async function typeInto(el, text) {
+function pasteInto(el, text) {
   el.focus();
-  for (const char of text) {
-    el.dispatchEvent(new KeyboardEvent('keydown', { key: char, bubbles: true }));
-    document.execCommand('insertText', false, char);
-    el.dispatchEvent(new KeyboardEvent('keyup',   { key: char, bubbles: true }));
-    await sleep(25);
-  }
+  document.execCommand('insertText', false, text);
 }
