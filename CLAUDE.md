@@ -8,7 +8,7 @@ Forwards all emails in the current Gmail paginated view to a fixed recipient add
 |---|---|
 | `manifest.json` | MV3 manifest — declares permissions, service worker, content scripts |
 | `background.js` | Service worker — listens for toolbar button click, messages content script |
-| `utils.js` | Generic helpers: `sleep`, `waitFor`, `findButton`, `typeInto` |
+| `utils.js` | Generic helpers: `sleep`, `waitFor`, `pasteInto` |
 | `ui.js` | DOM UI: error toast container, stop button |
 | `gmail.js` | Gmail-specific logic: `readCounter`, `currentMessageId`, `forwardOne` |
 | `content.js` | Entry point: `RECIPIENT` config, `forwardAll` loop, message listener |

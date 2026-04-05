@@ -32,7 +32,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
         chrome.debugger.sendCommand(target, 'Input.dispatchKeyEvent', { ...keyDown, type: 'keyUp', text: '' }, res)
       );
     } catch (err) {
-      console.error('[Gmail Forwarder] pressForward error:', err);
+      console.error('[Gmail Forwarder] pressKey error:', err);
     } finally {
       await new Promise((res) => chrome.debugger.detach(target, res));
     }

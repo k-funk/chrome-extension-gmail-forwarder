@@ -19,7 +19,7 @@ function currentMessageId() {
 }
 
 async function forwardOne() {
-  // Record baseline combobox count (e.g. the search bar is always one).
+  // Record baseline combobox count so we can detect when the compose To field appears.
   const baseCount = document.querySelectorAll('[role="combobox"]').length;
 
   // Ask background.js to send a trusted 'f' keypress via CDP (Gmail's Forward shortcut).
@@ -35,7 +35,7 @@ async function forwardOne() {
     return boxes.length > baseCount ? boxes[boxes.length - 1] : null;
   });
 
-  await sleep(500);
+  await sleep(500); // let the compose field finish initializing before pasting
   pasteInto(toField, RECIPIENT);
 
   // Tab to confirm the address chip.
